@@ -1,0 +1,16 @@
+# Executables, env dependend files
+*.o
+*.so
+
+# Build directories
+bin/
+
+# IDE files
+.vs
+*.vcxproj*
+*.sln
+
+
+
+
+
