@@ -1,8 +1,8 @@
-#include "Gui/widget.hpp"
-#include "Gui/guiContainer.hpp"
+#include "widget.hpp"
+#include "guiContainer.hpp"
 #include <iostream>
 
-namespace WhitE::gui {
+namespace WeGui {
 
 Widget::Widget()
 	:mParent(nullptr)
@@ -34,7 +34,7 @@ void Widget::draw(sf::RenderTarget& renderTarget, sf::RenderStates renderStates)
 
 void Widget::setParent(GuiContainer* parentContainer)
 {
-	mParent = parentContainer;
+ 	mParent = parentContainer;
 }
 
 GuiContainer* Widget::getParent() const

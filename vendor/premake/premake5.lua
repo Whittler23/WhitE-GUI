@@ -1,9 +1,8 @@
 printf ""
-printf "For now project configuration is only availible when using Visual Studio"
-printf "Building WhitE project using Premake..."
+printf "Building WhitEGUI......"
 printf ""
 
-workspace "WhitE"
+workspace "WhitEGUI"
     architecture "x64"
     location "../../"
 	cppdialect "C++17"
@@ -13,16 +12,16 @@ workspace "WhitE"
         "Release"
     }
     
-project "WhitE"
+project "WhitEGUI"
     language "C++"
-    kind "ConsoleApp"
+    kind "StaticLib"
 
-    targetdir "../../bin/bin/%{cfg.buildcfg}/" 
-	objdir "../../bin/obj/%{cfg.buildcfg}/" 
+    targetdir "../../bin/bin/" 
+	objdir "../../bin/obj/" 
 
     files {
          "../../src/**.cpp",
-         "../../src/**.hpp",
+         "../../includes/**.hpp",
 		 "../../src/**.inl"
     }
 
@@ -31,9 +30,9 @@ project "WhitE"
     libdirs { "../../vendor/sfml-2.5.1/lib" }
 
     includedirs{
+        "../../includes",
         "../../src",
         "../../vendor/sfml-2.5.1/include",
-        "../../vendor/entt-3.2.0/src"
     }
 
     links{
@@ -82,3 +81,68 @@ project "WhitE"
 
     filter{}
 	
+printf ""
+printf "Building GUI Sandbox..."
+printf ""
+    
+project "WhitEGUISandbox"
+    language "C++"
+    kind "ConsoleApp"
+
+    targetdir "../../Sandbox/bin/bin/%{cfg.buildcfg}/" 
+	objdir "../../Sandbox/bin/obj/%{cfg.buildcfg}/" 
+
+    files {
+         "../../Sandbox/**.cpp",
+         "../../Sandbox/**.hpp"
+    }
+
+    defines { "SFML_STATIC" }
+
+    libdirs { 
+	"../../vendor/sfml-2.5.1/lib",
+	"../../bin/bin/"
+	}
+
+    includedirs{
+        "../../includes",
+        "../../vendor/sfml-2.5.1/include"
+    }
+
+    links{
+        "opengl32.lib",
+        "winmm.lib",
+        "gdi32.lib",
+        "freetype.lib",
+        "flac.lib",
+        "vorbisenc.lib",
+        "vorbisfile.lib",
+        "vorbis.lib",
+        "ogg.lib",
+        "openal32.lib",
+		"WhitEGUI.lib"
+    }
+
+    filter{ "configurations:Debug" }
+        symbols "On"
+
+        links{
+            "sfml-graphics-s-d",
+            "sfml-audio-s-d",
+            "sfml-window-s-d",
+            "sfml-system-s-d"
+        }
+
+    filter{ "configurations:Release" }
+        optimize "On"
+
+        links{
+            "sfml-graphics-s",
+            "sfml-audio-s", 
+            "sfml-window-s",
+            "sfml-system-s"
+			}
+       
+
+	
+

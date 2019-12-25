@@ -2,7 +2,7 @@
 
 #include <SFML/System/Vector2.hpp>
 
-namespace WhitE::gui {
+namespace WeGui {
 
 class WidgetProperties 
 {

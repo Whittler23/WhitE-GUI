@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Gui/widgetProperties.hpp"
+#include "widgetProperties.hpp"
 
 #include <SFML/Graphics.hpp>
 
 #include <string>
 
-namespace WhitE::gui {
+namespace WeGui {
 
 class GuiContainer;
 

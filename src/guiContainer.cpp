@@ -1,9 +1,8 @@
-#include "Gui/guiContainer.hpp"
-#include "Gui/widgetProperties.hpp"
+#include "guiContainer.hpp"
+#include "widget.hpp"
+#include "widgetProperties.hpp"
 
-#include "Logger/logs.hpp"
-
-namespace WhitE::gui {
+namespace WeGui {
 
 /////////////////////////////////////////////////////////////
 					//CONSTRUCTORS

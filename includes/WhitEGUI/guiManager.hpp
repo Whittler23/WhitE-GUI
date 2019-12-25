@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Gui/guiContainer.hpp"
+#include "WhitEGUI/guiContainer.hpp"
 
-#include "Gui/Widgets/button.hpp"
+#include "WhitEGUI/Widgets/button.hpp"
 
 #include <SFML/Graphics.hpp>
 
@@ -10,7 +10,7 @@
 #include <string>
 #include <memory>
 
-namespace WhitE::gui {
+namespace WeGui {
 
 class Widget;
 
@@ -49,4 +49,4 @@ private:
 
 }
 
-#include "Gui/guiManager.inl"
+#include "guiManager.inl"

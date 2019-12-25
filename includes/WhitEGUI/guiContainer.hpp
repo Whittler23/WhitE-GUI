@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Gui/widget.hpp"
+#include "widget.hpp"
 
 #include <SFML/Graphics.hpp>
 
 #include <unordered_map>
 #include <memory>
 
-namespace WhitE::gui {
+namespace WeGui {
 
 class Widget;
 

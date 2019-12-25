@@ -1,7 +1,6 @@
-#include "button.hpp"
-#include "Gui/Widgets/button.hpp"
+#include "Widgets/button.hpp"
 
-namespace WhitE::gui{
+namespace WeGui{
 
 Button::Button()
 {

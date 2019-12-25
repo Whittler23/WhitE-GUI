@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Gui/widgetProperties.hpp"
+#include "widgetProperties.hpp"
 
-namespace WhitE::gui {
+namespace WeGui {
 
 /////////////////////////////////////////////////////////////
 					//CONSTRUCTORS

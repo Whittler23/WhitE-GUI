@@ -1,6 +1,6 @@
-#include "guiManager.hpp"
+#include "WhitEGUI/guiManager.hpp"
 
-namespace WhitE::gui{
+namespace WeGui{
 
 GuiManager::GuiManager(sf::RenderTarget& renderTarget)
 	:mRenderTarget(renderTarget)

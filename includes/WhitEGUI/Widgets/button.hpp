@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Gui/Widgets/clickableWidget.hpp"
+#include "Widgets/clickableWidget.hpp"
 
-namespace WhitE::gui {
+namespace WeGui {
 
 class Button : public ClickableWidget
 {
