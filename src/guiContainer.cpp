@@ -21,8 +21,8 @@ GuiContainer::GuiContainer()
 
 void GuiContainer::draw(sf::RenderTarget& renderTarget, sf::RenderStates renderStates) const
 {
-	sf::RectangleShape border(getSize());
-	border.setPosition(getPosition());
+	sf::RectangleShape border(mContainerSize);
+	border.setPosition(mContainerPosition);
 	border.setFillColor(sf::Color(0, 255, 0, 100));
 	renderTarget.draw(border, renderStates);
 
@@ -68,11 +68,8 @@ void GuiContainer::setPercentageSize(sf::Vector2f percentageSize)
 void GuiContainer::setPosition(sf::Vector2f position)
 {
 	auto oldPosition = getPosition();
-	auto offset = position - oldPosition;
+	mContainerPosition = position;
 	Widget::setPosition(position);
-	mContainerSize = position;
-	for (const auto& widget : mWidgetsMap)
-		widget.second->setPosition(widget.second->getPosition() + offset);
 }
 
 void GuiContainer::setPercentagePosition(sf::Vector2f percentagePosition)

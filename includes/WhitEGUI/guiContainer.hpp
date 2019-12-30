@@ -35,6 +35,7 @@ private:
 	std::unordered_map<std::string, std::unique_ptr<Widget>> mWidgetsMap;
 
 	sf::Vector2f mContainerSize;
+	sf::Vector2f mContainerPosition;
 };
 
 }

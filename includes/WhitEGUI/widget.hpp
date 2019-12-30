@@ -18,9 +18,12 @@ public:
 
 	virtual void draw(sf::RenderTarget& renderTarget, sf::RenderStates renderStates) const;
 
-	void setParent(GuiContainer* parentContainer);
+	void setParent(Widget* parentContainer);
 	void removeParent();
-	GuiContainer* getParent() const;
+	Widget* getParent() const;
+
+	void addChild(Widget* widget);
+	void removeChild(Widget* widget);
 
 	void setTexture(sf::Texture& widgetTexture);
 	bool hasTexture() const;
@@ -49,7 +52,8 @@ protected:
 	sf::Sprite mSprite;
 
 private:
-	GuiContainer* mParent;
+	Widget* mParent;
+	std::vector<Widget*> mChildren;
 
 	std::string mWidgetName;
 };

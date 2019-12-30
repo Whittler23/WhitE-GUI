@@ -27,17 +27,36 @@ void Widget::draw(sf::RenderTarget& renderTarget, sf::RenderStates renderStates)
 	renderTarget.draw(border, renderStates);
 }
 
-void Widget::setParent(GuiContainer* parentContainer)
+void Widget::setParent(Widget* parentContainer)
 {
- 	mParent = parentContainer;
+	if (mParent)
+	{
+		mParent->removeChild(this);
+	}
+	mParent = parentContainer;
+	parentContainer->addChild(this);
 }
 
-GuiContainer* Widget::getParent() const
+Widget* Widget::getParent() const
 {
-	if (!mParent)
-		return nullptr;
-	else
-		return mParent;
+	return mParent;
+}
+
+void Widget::addChild(Widget* widget)
+{
+	mChildren.emplace_back(widget);
+}
+
+void Widget::removeChild(Widget* widget)
+{
+	for (auto it = mChildren.begin(); it != mChildren.end(); ++it)
+	{
+		if (*it == widget)
+		{
+			mChildren.erase(it);
+			return;
+		}
+	}
 }
 
 void Widget::setTexture(sf::Texture& widgetTexture)
@@ -82,7 +101,8 @@ sf::Vector2f Widget::getSize() const
 
 sf::Vector2f Widget::getPercentSize() const
 {
-	return mWidgetProperties.getPercentageSize(getParent()->getContainerSize());
+	return sf::Vector2f(0.f, 0.f);
+	//return mWidgetProperties.getPercentageSize(getParent()->getContainerSize());
 }
 
 void Widget::setPercentagePosition(float percentagePositionX, float percentagePositionY)
@@ -102,7 +122,13 @@ void Widget::setPosition(float positionX, float positionY)
 
 void Widget::setPosition(sf::Vector2f position)
 {
+	auto oldPosition = getPosition();
 	mWidgetProperties.setPosition(position);
+	for (const auto child : mChildren)
+	{
+		auto offset = child->getPosition() - oldPosition;
+		child->setPosition(getPosition() + offset);
+	}
 }
 
 sf::Vector2f Widget::getPosition() const
@@ -112,7 +138,8 @@ sf::Vector2f Widget::getPosition() const
 
 sf::Vector2f Widget::getPercentPosition() const
 {
-	return mWidgetProperties.getPercentagePosition(getParent()->getContainerSize());
+	return sf::Vector2f(0.f, 0.f);
+	//return mWidgetProperties.getPercentagePosition(getParent()->getContainerSize());
 }
 
 std::string Widget::getName() const

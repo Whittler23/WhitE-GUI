@@ -9,13 +9,18 @@ int main()
 	WeGui::GuiManager guiManager(renderWindow);
 
 
-	auto testContainer = guiManager.createWidget <WeGui::GuiContainer>("testContainer");
-	testContainer->setPosition(sf::Vector2f(200.f, 25.f));
-	testContainer->setSize(sf::Vector2f(200.f, 600.f));
+	//auto testContainer = guiManager.createWidget <WeGui::GuiContainer>("testContainer");
+	//testContainer->setPosition(sf::Vector2f(200.f, 25.f));
+	//testContainer->setSize(sf::Vector2f(200.f, 600.f));
 
-	auto testWidget = guiManager.createWidget<WeGui::Widget>("testWidget", dynamic_cast<WeGui::GuiContainer*>(guiManager.get("testContainer")));
-	testWidget->setPosition(sf::Vector2f(500.f, 50.f));
-	testWidget->setSize(sf::Vector2f(500.f, 500.f));
+	auto testWidget = guiManager.createWidget<WeGui::Widget>("testWidget");
+	testWidget->setPosition(sf::Vector2f(50.f, 50.f));
+	testWidget->setSize(sf::Vector2f(50.f, 50.f));
+
+	auto testWidget2 = guiManager.createWidget<WeGui::Widget>("testWidget2");
+	testWidget2->setPosition(sf::Vector2f(200.f, 50.f));
+	testWidget2->setSize(sf::Vector2f(50.f, 50.f));
+	testWidget2->setParent(testWidget);
 
 
 	while (renderWindow.isOpen())
@@ -29,7 +34,7 @@ int main()
 				if (event.mouseButton.button == sf::Mouse::Left)
 				{
 					std::cout << event.mouseButton.x << " " << event.mouseButton.y << std::endl;
-					guiManager.mGuiContainer.get("testContainer")->setPosition(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+					guiManager.mGuiContainer.get("testWidget")->setPosition(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
 					break;
 				}
 				else
