@@ -2,8 +2,6 @@
 
 #include "WhitEGUI/guiContainer.hpp"
 
-#include "WhitEGUI/Widgets/button.hpp"
-
 #include <SFML/Graphics.hpp>
 
 #include <unordered_map>
@@ -40,7 +38,13 @@ public:
 	template<typename T>
 	T* createWidget(const std::string& widgetName);
 
-private:
+	template<typename T>
+	T* createWidget(const std::string& widgetName, const std::string& targetContainerName);
+
+	template<typename T>
+	T* createWidget(const std::string& widgetName, GuiContainer* targetContainer);
+
+public:
 	sf::View mGuiView;
 	GuiContainer mGuiContainer;
 

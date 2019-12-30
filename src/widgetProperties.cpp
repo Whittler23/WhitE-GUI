@@ -1,6 +1,6 @@
 #pragma once
 
-#include "widgetProperties.hpp"
+#include "WhitEGUI/widgetProperties.hpp"
 
 namespace WeGui {
 

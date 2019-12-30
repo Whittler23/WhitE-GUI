@@ -1,6 +1,5 @@
-#include "widget.hpp"
-#include "guiContainer.hpp"
-#include <iostream>
+#include "WhitEGUI/widget.hpp"
+#include "WhitEGUI/guiContainer.hpp"
 
 namespace WeGui {
 
@@ -8,10 +7,6 @@ Widget::Widget()
 	:mParent(nullptr)
 	,mWidgetName("widget")
 	,mWidgetProperties(0.f, 0.f, 0.f, 0.f, sf::Vector2f(0.f, 0.f))
-	,mOpacity(100)
-	,mVisible(true)
-	,mEnabled(true)
-	,mMouseHover(false)
 {
 }
 
@@ -19,17 +14,17 @@ Widget::Widget(const std::string& widgetName)
 	:mParent(nullptr)
 	,mWidgetName(widgetName)
 	,mWidgetProperties(0.f, 0.f, 0.f, 0.f, sf::Vector2f(0.f, 0.f))
-	,mOpacity(100)
-	,mVisible(true)
-	,mEnabled(true)
-	,mMouseHover(false)
 {
 }
 
 void Widget::draw(sf::RenderTarget& renderTarget, sf::RenderStates renderStates) const
 {
-	renderStates.transform.translate(getPosition());
-	renderTarget.draw(mSprite, renderStates);
+	sf::RectangleShape border(getSize());
+	border.setPosition(getPosition());
+	border.setFillColor(sf::Color(0, 0, 255, 100));
+	border.setOutlineColor(sf::Color(255, 0, 0, 100));
+	border.setOutlineThickness(5.f);
+	renderTarget.draw(border, renderStates);
 }
 
 void Widget::setParent(GuiContainer* parentContainer)
@@ -39,7 +34,10 @@ void Widget::setParent(GuiContainer* parentContainer)
 
 GuiContainer* Widget::getParent() const
 {
-	return mParent;
+	if (!mParent)
+		return nullptr;
+	else
+		return mParent;
 }
 
 void Widget::setTexture(sf::Texture& widgetTexture)
@@ -57,14 +55,24 @@ const sf::Texture* Widget::getTexture() const
 	return mSprite.getTexture();
 }
 
-void Widget::setPercentageSize(const sf::Vector2f& newPercentageSize)
+void Widget::setPercentageSize(float percentageSizeX, float percentageSizeY)
 {
-	mWidgetProperties.setPercentageSize(newPercentageSize, getParent()->getContainerSize());
+	setPercentageSize(sf::Vector2f(percentageSizeX, percentageSizeY));
 }
 
-void Widget::setSize(const sf::Vector2f& newSize)
+void Widget::setPercentageSize(sf::Vector2f percentageSize)
 {
-	mWidgetProperties.setSize(newSize);
+	mWidgetProperties.setPercentageSize(percentageSize, mParent->getSize());
+}
+
+void Widget::setSize(float sizeX, float sizeY)
+{
+	setSize(sf::Vector2f(sizeX, sizeY));
+}
+
+void Widget::setSize(sf::Vector2f size)
+{
+	mWidgetProperties.setSize(size);
 }
 
 sf::Vector2f Widget::getSize() const
@@ -77,14 +85,24 @@ sf::Vector2f Widget::getPercentSize() const
 	return mWidgetProperties.getPercentageSize(getParent()->getContainerSize());
 }
 
-void Widget::setPercentagePosition(const sf::Vector2f& newPercentagePosition)
+void Widget::setPercentagePosition(float percentagePositionX, float percentagePositionY)
 {
-	mWidgetProperties.setPercentagePosition(newPercentagePosition, mParent->getContainerSize());
+	setPercentagePosition(sf::Vector2f(percentagePositionX, percentagePositionY));
 }
 
-void Widget::setPosition(const sf::Vector2f& newPosition)
+void Widget::setPercentagePosition(sf::Vector2f percentagePosition)
 {
-	mWidgetProperties.setPosition(newPosition);
+	mWidgetProperties.setPercentagePosition(percentagePosition, mParent->getSize());
+}
+
+void Widget::setPosition(float positionX, float positionY)
+{
+	setPosition(sf::Vector2f(positionX, positionY));
+}
+
+void Widget::setPosition(sf::Vector2f position)
+{
+	mWidgetProperties.setPosition(position);
 }
 
 sf::Vector2f Widget::getPosition() const
@@ -102,43 +120,14 @@ std::string Widget::getName() const
 	return mWidgetName;
 }
 
-void Widget::setVisible(bool isVisible)
-{
-	mVisible = isVisible;
-}
-
-bool Widget::getVisible() const
-{
-	return mVisible;
-}
-
-void Widget::setEnabled(bool isEnabled)
-{
-	mEnabled = isEnabled;
-}
-
-bool Widget::getEnabled() const
-{
-	return mEnabled;
-}
-
-void Widget::setOpacity(int opacity)
-{
-	mOpacity = opacity;
-}
-
-int Widget::getOpacity() const
-{
-	return mOpacity;
-}
-
 /////////////////////////////////////////////////////////////
 						//PRIVATE
 /////////////////////////////////////////////////////////////
 	
 void Widget::recalculateValues(const sf::Vector2f& prevViewSize)
 {
-	mWidgetProperties.recalculateValues(prevViewSize, mParent->getSize());
+	if(mParent)
+		mWidgetProperties.recalculateValues(prevViewSize, mParent->getSize());
 }
 
 /////////////////////////////////////////////////////////////

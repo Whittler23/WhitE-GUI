@@ -1,6 +1,8 @@
-#include "guiContainer.hpp"
-#include "widget.hpp"
-#include "widgetProperties.hpp"
+#include "WhitEGUI/guiContainer.hpp"
+#include "WhitEGUI/widget.hpp"
+#include "WhitEGUI/widgetProperties.hpp"
+#include "WhitEGUI/guiContainer.hpp"
+#include <iostream>
 
 namespace WeGui {
 
@@ -19,8 +21,12 @@ GuiContainer::GuiContainer()
 
 void GuiContainer::draw(sf::RenderTarget& renderTarget, sf::RenderStates renderStates) const
 {
+	sf::RectangleShape border(getSize());
+	border.setPosition(getPosition());
+	border.setFillColor(sf::Color(0, 255, 0, 100));
+	renderTarget.draw(border, renderStates);
+
 	for (const auto& widget : mWidgetsMap)
-		if(widget.second->getVisible())
 			widget.second->draw(renderTarget, renderStates);
 }
 
@@ -47,11 +53,32 @@ void GuiContainer::removeAllWidgets()
 	mWidgetsMap.clear();
 }
 
-void GuiContainer::setContainerSize(const sf::Vector2f& newSize)
+void GuiContainer::setSize(sf::Vector2f size)
 {
-	mPreviousContainerSize = mContainerSize;
-	mContainerSize = newSize;
-	recalculateWidgetsValues();
+	Widget::setSize(size);
+	mContainerSize = size;
+}
+
+void GuiContainer::setPercentageSize(sf::Vector2f percentageSize)
+{
+	Widget::setPercentageSize(percentageSize);
+	mContainerSize = getSize();
+}
+
+void GuiContainer::setPosition(sf::Vector2f position)
+{
+	auto oldPosition = getPosition();
+	auto offset = position - oldPosition;
+	Widget::setPosition(position);
+	mContainerSize = position;
+	for (const auto& widget : mWidgetsMap)
+		widget.second->setPosition(widget.second->getPosition() + offset);
+}
+
+void GuiContainer::setPercentagePosition(sf::Vector2f percentagePosition)
+{
+	Widget::setPercentagePosition(percentagePosition);
+	mContainerSize = getSize();
 }
 
 sf::Vector2f GuiContainer::getContainerSize() const
@@ -71,17 +98,5 @@ std::vector<Widget*> GuiContainer::getWidgets() const
 		widgets.emplace_back(widget.second.get());
 	return widgets;
 }
-
-/////////////////////////////////////////////////////////////
-						//PRIVATE
-/////////////////////////////////////////////////////////////
-
-void GuiContainer::recalculateWidgetsValues()
-{
-	for (auto& widget : mWidgetsMap)
-		widget.second->recalculateValues(mPreviousContainerSize);
-}
-
-/////////////////////////////////////////////////////////////
 
 }
