@@ -5,15 +5,6 @@ namespace WeGui {
 
 Widget::Widget()
 	:mParent(nullptr)
-	,mWidgetName("widget")
-	,mWidgetProperties(0.f, 0.f, 0.f, 0.f, sf::Vector2f(0.f, 0.f))
-{
-}
-
-Widget::Widget(const std::string& widgetName)
-	:mParent(nullptr)
-	,mWidgetName(widgetName)
-	,mWidgetProperties(0.f, 0.f, 0.f, 0.f, sf::Vector2f(0.f, 0.f))
 {
 }
 
@@ -29,12 +20,14 @@ void Widget::draw(sf::RenderTarget& renderTarget, sf::RenderStates renderStates)
 
 void Widget::setParent(Widget* parentContainer)
 {
-	if (mParent)
-	{
+	if(mParent != nullptr)
 		mParent->removeChild(this);
-	}
 	mParent = parentContainer;
-	parentContainer->addChild(this);
+}
+
+void Widget::removeParent()
+{
+	mParent = nullptr;
 }
 
 Widget* Widget::getParent() const
@@ -44,22 +37,20 @@ Widget* Widget::getParent() const
 
 void Widget::addChild(Widget* widget)
 {
+	widget->setParent(this);
 	mChildren.emplace_back(widget);
 }
 
 void Widget::removeChild(Widget* widget)
 {
 	for (auto it = mChildren.begin(); it != mChildren.end(); ++it)
-	{
 		if (*it == widget)
 		{
 			mChildren.erase(it);
 			return;
 		}
-	}
-}
 
-void Widget::setTexture(sf::Texture& widgetTexture)
+}void Widget::setTexture(sf::Texture& widgetTexture)
 {
 	mSprite.setTexture(widgetTexture);
 }
@@ -74,89 +65,78 @@ const sf::Texture* Widget::getTexture() const
 	return mSprite.getTexture();
 }
 
-void Widget::setPercentageSize(float percentageSizeX, float percentageSizeY)
+void Widget::setPercentageSize(sf::Vector2f percentageSize, bool isGlobal)
 {
-	setPercentageSize(sf::Vector2f(percentageSizeX, percentageSizeY));
-}
-
-void Widget::setPercentageSize(sf::Vector2f percentageSize)
-{
-	mWidgetProperties.setPercentageSize(percentageSize, mParent->getSize());
-}
-
-void Widget::setSize(float sizeX, float sizeY)
-{
-	setSize(sf::Vector2f(sizeX, sizeY));
+	if (mParent && !isGlobal)
+	{
+		sf::Vector2f parentSize = mParent->getSize();
+		setSize(sf::Vector2f(parentSize.x * percentageSize.x / 100, parentSize.y * percentageSize.y / 100));
+	}
+	else if (isGlobal)
+	{
+		//TODO
+	}
 }
 
 void Widget::setSize(sf::Vector2f size)
 {
-	mWidgetProperties.setSize(size);
+	sf::IntRect oldTextureRect = mSprite.getTextureRect();
+	sf::IntRect newTextureRect = mSprite.getTextureRect();
+	newTextureRect.width = size.x;
+	newTextureRect.height = size.y;
+	mSprite.setTextureRect(newTextureRect);
+
+	for (auto& child : mChildren)
+		child->resize(sf::Vector2i(oldTextureRect.width, oldTextureRect.height), sf::Vector2i(newTextureRect.width, newTextureRect.height));
 }
 
 sf::Vector2f Widget::getSize() const
 {
-	return mWidgetProperties.getSize();
+	auto textureRect = mSprite.getTextureRect();
+	return sf::Vector2f(textureRect.width, textureRect.height);
 }
 
-sf::Vector2f Widget::getPercentSize() const
+sf::Vector2f Widget::getPercentSize(bool isGlobal) const
 {
-	return sf::Vector2f(0.f, 0.f);
-	//return mWidgetProperties.getPercentageSize(getParent()->getContainerSize());
-}
-
-void Widget::setPercentagePosition(float percentagePositionX, float percentagePositionY)
-{
-	setPercentagePosition(sf::Vector2f(percentagePositionX, percentagePositionY));
+	//TODO
+	return sf::Vector2f();
 }
 
 void Widget::setPercentagePosition(sf::Vector2f percentagePosition)
 {
-	mWidgetProperties.setPercentagePosition(percentagePosition, mParent->getSize());
-}
-
-void Widget::setPosition(float positionX, float positionY)
-{
-	setPosition(sf::Vector2f(positionX, positionY));
+	//TODO
 }
 
 void Widget::setPosition(sf::Vector2f position)
 {
 	auto oldPosition = getPosition();
-	mWidgetProperties.setPosition(position);
+	mSprite.setPosition(position);
 	for (const auto child : mChildren)
 	{
 		auto offset = child->getPosition() - oldPosition;
 		child->setPosition(getPosition() + offset);
 	}
+	//TODO
 }
 
 sf::Vector2f Widget::getPosition() const
 {
-	return mWidgetProperties.getPosition();
+	//TODO
+	return mSprite.getPosition();
 }
 
 sf::Vector2f Widget::getPercentPosition() const
 {
+	//TODO
 	return sf::Vector2f(0.f, 0.f);
-	//return mWidgetProperties.getPercentagePosition(getParent()->getContainerSize());
 }
 
-std::string Widget::getName() const
+void Widget::resize(const sf::Vector2i& previousParentSize, const sf::Vector2i& currentParentSize)
 {
-	return mWidgetName;
+	sf::Vector2f newSize;
+	newSize.x = getSize().x / previousParentSize.x * currentParentSize.x;
+	newSize.y = getSize().y / previousParentSize.y * currentParentSize.y;
+	setSize(newSize);
 }
-
-/////////////////////////////////////////////////////////////
-						//PRIVATE
-/////////////////////////////////////////////////////////////
-	
-void Widget::recalculateValues(const sf::Vector2f& prevViewSize)
-{
-	if(mParent)
-		mWidgetProperties.recalculateValues(prevViewSize, mParent->getSize());
-}
-
-/////////////////////////////////////////////////////////////
 
 }

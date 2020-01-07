@@ -1,10 +1,6 @@
 #pragma once
 
-#include "widgetProperties.hpp"
-
 #include <SFML/Graphics.hpp>
-
-#include <string>
 
 namespace WeGui {
 
@@ -14,7 +10,6 @@ class Widget
 {
 public:
 	Widget();
-	Widget(const std::string& widgetName);
 
 	virtual void draw(sf::RenderTarget& renderTarget, sf::RenderStates renderStates) const;
 
@@ -29,33 +24,22 @@ public:
 	bool hasTexture() const;
 	const sf::Texture* getTexture() const;
 
-	void setPercentageSize(float percentageSizeX, float percentageSizeY);
-	virtual void setPercentageSize(sf::Vector2f percentageSize);
-	void setSize(float sizeX, float sizeY);
+	virtual void setPercentageSize(sf::Vector2f percentageSize, bool isGlobal = false);
 	virtual void setSize(sf::Vector2f size);
-	sf::Vector2f getPercentSize() const;
+	sf::Vector2f getPercentSize(bool global = false) const;
 	sf::Vector2f getSize() const;
 
-	void setPercentagePosition(float percentagePositionX, float percentagePositionY);
 	virtual void setPercentagePosition(sf::Vector2f percentagePosition);
-	void setPosition(float positionX, float positionY);
 	virtual void setPosition(sf::Vector2f position);
-	sf::Vector2f getPosition() const;
 	sf::Vector2f getPercentPosition() const;
+	sf::Vector2f getPosition() const;
 
-	std::string getName() const;
-
-	void recalculateValues(const sf::Vector2f& prevViewSize);
-
-protected:
-	WidgetProperties mWidgetProperties;
-	sf::Sprite mSprite;
+	void resize(const sf::Vector2i& previousParentSize, const sf::Vector2i& currentParentSize);
 
 private:
 	Widget* mParent;
+	sf::Sprite mSprite;
 	std::vector<Widget*> mChildren;
-
-	std::string mWidgetName;
 };
 
 }

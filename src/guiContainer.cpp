@@ -1,23 +1,12 @@
 #include "WhitEGUI/guiContainer.hpp"
 #include "WhitEGUI/widget.hpp"
-#include "WhitEGUI/widgetProperties.hpp"
 #include "WhitEGUI/guiContainer.hpp"
-#include <iostream>
 
 namespace WeGui {
 
-/////////////////////////////////////////////////////////////
-					//CONSTRUCTORS
-/////////////////////////////////////////////////////////////
-
 GuiContainer::GuiContainer()
-	:Widget("GuiContainer")
 {
 }
-
-/////////////////////////////////////////////////////////////
-						//PUBLIC
-/////////////////////////////////////////////////////////////
 
 void GuiContainer::draw(sf::RenderTarget& renderTarget, sf::RenderStates renderStates) const
 {
@@ -32,7 +21,7 @@ void GuiContainer::draw(sf::RenderTarget& renderTarget, sf::RenderStates renderS
 
 void GuiContainer::addWidget(const std::string& widgetName, std::unique_ptr<Widget> newWidget)
 {
-	newWidget->setParent(this);
+	addChild(newWidget.get());
 	mWidgetsMap.emplace(std::make_pair(widgetName, std::move(newWidget)));
 }
 
@@ -56,10 +45,10 @@ void GuiContainer::removeAllWidgets()
 void GuiContainer::setSize(sf::Vector2f size)
 {
 	Widget::setSize(size);
-	mContainerSize = size;
+	mContainerSize = sf::Vector2f(size);
 }
 
-void GuiContainer::setPercentageSize(sf::Vector2f percentageSize)
+void GuiContainer::setPercentageSize(sf::Vector2f percentageSize, bool isGlobal)
 {
 	Widget::setPercentageSize(percentageSize);
 	mContainerSize = getSize();

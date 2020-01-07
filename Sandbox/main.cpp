@@ -8,19 +8,14 @@ int main()
 	sf::RenderWindow renderWindow(sf::VideoMode(1900.f, 1080.f), "Sandbox");
 	WeGui::GuiManager guiManager(renderWindow);
 
-
-	//auto testContainer = guiManager.createWidget <WeGui::GuiContainer>("testContainer");
-	//testContainer->setPosition(sf::Vector2f(200.f, 25.f));
-	//testContainer->setSize(sf::Vector2f(200.f, 600.f));
-
 	auto testWidget = guiManager.createWidget<WeGui::Widget>("testWidget");
 	testWidget->setPosition(sf::Vector2f(50.f, 50.f));
-	testWidget->setSize(sf::Vector2f(50.f, 50.f));
+	testWidget->setSize(sf::Vector2f(500.f, 500.f));
 
 	auto testWidget2 = guiManager.createWidget<WeGui::Widget>("testWidget2");
-	testWidget2->setPosition(sf::Vector2f(200.f, 50.f));
-	testWidget2->setSize(sf::Vector2f(50.f, 50.f));
-	testWidget2->setParent(testWidget);
+	testWidget2->setPosition(sf::Vector2f(50.f, 50.f));
+	testWidget2->setSize(sf::Vector2f(250.f, 250.f));
+	testWidget->addChild(testWidget2);
 
 
 	while (renderWindow.isOpen())
@@ -39,7 +34,12 @@ int main()
 				}
 				else
 				{
-					guiManager.mGuiContainer.setPosition(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+					auto widget = guiManager.mGuiContainer.get("testWidget");
+					auto position = widget->getPosition();
+					position += widget->getSize();
+					auto pressPosition = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
+					auto newSize = pressPosition - position;
+					guiManager.mGuiContainer.get("testWidget")->setSize(widget->getSize()+newSize);
 					break;
 				}
 			case sf::Event::Closed:
@@ -49,8 +49,7 @@ int main()
 				break;
 			}
 		}
-		////std::cout << guiManager.mGuiContainer.getSize().x << std::endl;
-		//std::cout << guiManager.mGuiContainer.get("testWidget")->getSize().x << std::endl;
+
 		renderWindow.clear();
 		guiManager.draw();
 		renderWindow.display();

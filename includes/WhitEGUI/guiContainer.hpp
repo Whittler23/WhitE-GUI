@@ -23,7 +23,7 @@ public:
 	void removeAllWidgets();
 
 	void setSize(sf::Vector2f size) override;
-	void setPercentageSize(sf::Vector2f percentageSize) override;
+	void setPercentageSize(sf::Vector2f percentageSize, bool isGlobal = false) override;
 	void setPosition(sf::Vector2f size) override;
 	void setPercentagePosition(sf::Vector2f percentageSize) override;
 	sf::Vector2f getContainerSize() const;
